@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Панель администратора</title>
+</head>
+<body>
+  <header class="header-class">
+    <h1>Конференции.РФ — Админ</h1>
+    <nav><ul>
+      <li><a href="#" id="logout">Выход</a></li>
+    </ul></nav>
+  </header>
+
+  <main>
+    <section class="infosite"><h1>Все заявки пользователей</h1></section>
+    <div class="wrapper-col"><div id="list"></div></div>
+  </main>
+
+  <footer class="footer-site"><div><span>&copy; 2023 Self Rights</span></div></footer>
+
+  <script src="api.js"></script>
+  <script>
+    const statuses = ['Новая','Мероприятие назначено','Завершено'];
+
+    async function load() {
+      const r = await Auth.request('/api/admin/applications');
+      if (!r.ok) { location.href='index.html'; return; }
+      const items = await r.json();
+
+      if (!items.length) {
+        document.getElementById('list').innerHTML = '<p>Заявок нет.</p>';
+        return;
+      }
+
+      document.getElementById('list').innerHTML = `
+        <table>
+          <thead><tr>
+            <th>№</th><th>Пользователь</th><th>Контакты</th>
+            <th>Помещение</th><th>Дата</th><th>Оплата</th>
+            <th>Статус</th><th>Действие</th>
+          </tr></thead>
+          <tbody>
+            ${items.map(it => `
+              <tr>
+                <td>${it.id}</td>
+                <td>${it.full_name}<br><small>${it.login}</small></td>
+                <td>${it.phone}<br><small>${it.email}</small></td>
+                <td>${it.room_name}<br><small>${it.room_type}</small></td>
+                <td>${new Date(it.start_date).toLocaleString('ru-RU')}</td>
+                <td>${it.payment_method}</td>
+                <td>${it.status}</td>
+                <td class="actions">
+                  <select data-id="${it.id}">
+                    ${statuses.map(s =>
+                      `<option ${s===it.status?'selected':''}>${s}</option>`).join('')}
+                  </select>
+                </td>
+              </tr>`).join('')}
+          </tbody>
+        </table>`;
+
+      document.querySelectorAll('.actions select').forEach(sel => {
+        sel.addEventListener('change', async () => {
+          const r = await Auth.request(`/api/admin/applications/${sel.dataset.id}/status`, {
+            method:'PUT',
+            body: JSON.stringify({ status: sel.value })
+          });
+          if (!r.ok) {
+            alert((await r.json()).error);
+            load();
+          }
+        });
+      });
+    }
+
+    (async () => {
+      const user = await Auth.bootstrap();
+      if (!user || user.role !== 'admin') { location.href='index.html'; return; }
+      load();
+    })();
+
+    document.getElementById('logout').addEventListener('click', (e) => {
+      e.preventDefault(); Auth.logout();
+    });
+  </script>
+</body>
+</html>

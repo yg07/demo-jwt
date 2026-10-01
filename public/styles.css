@@ -1,0 +1,37 @@
+body { margin:0; background:#eee; font-family: Arial, sans-serif; }
+.header-class { background:#558a9d; box-shadow:0 3px 14px 4px #a8abdb; color:#fff; padding:20px 30px; overflow:hidden; }
+.header-class h1 { float:left; padding-left:30px; margin:0; }
+.header-class nav { float:right; font-weight:bold; }
+.header-class nav ul li { list-style:none; display:inline; margin-right:10px; }
+.header-class nav ul li a { text-decoration:none; text-transform:uppercase; color:#1b1734; }
+.header-class nav ul li a:hover { color:#fff; }
+.infosite { text-align:center; padding:30px; background:#eee; }
+.infosite h1 { color:rgb(66,115,158); }
+.wrapper-col { width:90%; overflow:hidden; padding:20px; margin:auto; }
+.col-main { width:100%; text-align:left; }
+.footer-site { padding:20px 0; background:#558a9d; color:#fff; text-align:center; margin-top:40px; }
+.footer-site a { color:#1b1734; text-decoration:none; margin-left:10px; }
+.footer-site a:hover { color:#fff; }
+.footer-site ul li { list-style:none; display:inline-block; margin-right:20px; }
+
+.form-card { background:#fff; padding:25px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.1); max-width:520px; margin:20px auto; }
+.form-card h2 { color:rgb(66,115,158); margin-top:0; }
+.form-card label { display:block; margin:12px 0 4px; font-weight:bold; color:#333; }
+.form-card input, .form-card select, .form-card textarea { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; font-size:14px; }
+.form-card button { margin-top:16px; padding:10px 22px; background:#558a9d; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:15px; }
+.form-card button:hover { background:#3f6f80; }
+.msg { margin-top:12px; padding:8px; border-radius:4px; font-size:14px; }
+.msg.error { background:#fdd; color:#900; }
+.msg.ok { background:#dfd; color:#060; }
+.link-toggle { display:block; margin-top:14px; text-align:center; color:#b9375e; text-decoration:none; }
+.link-toggle:hover { color:#558a9d; }
+
+table { width:100%; border-collapse:collapse; background:#fff; margin-top:16px; }
+th, td { padding:10px 12px; border:1px solid #ddd; text-align:left; font-size:14px; }
+th { background:#558a9d; color:#fff; }
+tr:nth-child(even) { background:#f7f9fa; }
+.status-new { color:#b9375e; font-weight:bold; }
+.status-assigned { color:#1b6b3a; font-weight:bold; }
+.status-done { color:#333; font-weight:bold; }
+.actions button, .actions select { padding:6px 10px; font-size:13px; border-radius:4px; border:1px solid #ccc; cursor:pointer; }
+.review-form textarea { min-height:60px; }

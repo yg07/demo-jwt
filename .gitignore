@@ -1,0 +1,77 @@
+# ===== Зависимости =====
+node_modules/
+jspm_packages/
+bower_components/
+.pnp
+.pnp.js
+
+# ===== Переменные окружения и секреты =====
+# JWT_SECRET, DB_PASSWORD и т.п. — НИКОГДА не коммитим!
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# ===== Логи =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ===== Кэши сборки =====
+.cache/
+.parcel-cache/
+.npm/
+.eslintcache
+.stylelintcache
+.node_repl_history
+
+# ===== Тесты =====
+coverage/
+.nyc_output/
+
+# ===== Сборка (если появится) =====
+dist/
+build/
+out/
+
+# ===== IDE и редакторы =====
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ===== OS =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===== Диагностика Node =====
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+node-report/
+
+# ===== Локальные заметки =====
+TODO.md
+NOTES.md
+*.local.md
+
+# ===== MySQL дампы (если делаете бэкапы локально) =====
+*.sql.gz
+dump.sql
+backup_*.sql

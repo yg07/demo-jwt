@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Авторизация — Конференции.РФ</title>
+</head>
+<body>
+  <header class="header-class">
+    <h1>Конференции.РФ</h1>
+    <nav><ul>
+      <li><a href="index.html">Вход</a></li>
+      <li><a href="register.html">Регистрация</a></li>
+    </ul></nav>
+  </header>
+
+  <main>
+    <section class="infosite"><h1>Авторизация пользователя</h1></section>
+    <div class="wrapper-col">
+      <div class="form-card">
+        <h2>Вход в систему</h2>
+        <form id="loginForm">
+          <label>Логин</label>
+          <input name="login" required>
+          <label>Пароль</label>
+          <input type="password" name="password" required>
+          <button type="submit">Войти</button>
+        </form>
+        <div id="msg" class="msg"></div>
+        <a class="link-toggle" href="register.html">Еще не зарегистрированы? Регистрация</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-site"><div><span>&copy; 2023 Self Rights</span></div></footer>
+
+  <script src="api.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const msg = document.getElementById('msg');
+      msg.className = 'msg';
+      try {
+        const user = await Auth.login(f.login.value, f.password.value);
+        msg.className = 'msg ok';
+        msg.textContent = 'Успешный вход';
+        setTimeout(() => {
+          location.href = user.role === 'admin' ? 'admin.html' : 'products.html';
+        }, 400);
+      } catch (err) {
+        msg.className = 'msg error';
+        msg.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>

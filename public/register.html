@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Регистрация</title>
+</head>
+<body>
+  <header class="header-class">
+    <h1>Конференции.РФ</h1>
+    <nav><ul>
+      <li><a href="index.html">Вход</a></li>
+      <li><a href="register.html">Регистрация</a></li>
+    </ul></nav>
+  </header>
+
+  <main>
+    <section class="infosite"><h1>Регистрация пользователя</h1></section>
+    <div class="wrapper-col">
+      <div class="form-card">
+        <h2>Создание пользователя</h2>
+        <form id="regForm">
+          <label>Логин (латиница/цифры, ≥6)</label>
+          <input name="login" required pattern="[A-Za-z0-9]{6,}">
+          <label>Пароль (≥8)</label>
+          <input type="password" name="password" required minlength="8">
+          <label>ФИО (кириллица)</label>
+          <input name="full_name" required>
+          <label>Телефон 8(XXX)XXX-XX-XX</label>
+          <input name="phone" placeholder="8(999)123-45-67" required>
+          <label>Email</label>
+          <input type="email" name="email" required>
+          <button type="submit">Создать пользователя</button>
+        </form>
+        <div id="msg" class="msg"></div>
+        <a class="link-toggle" href="index.html">Уже зарегистрированы? Войти</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer-site"><div><span>&copy; 2023 Self Rights</span></div></footer>
+
+  <script>
+    document.getElementById('regForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const msg = document.getElementById('msg');
+      msg.className = 'msg';
+      const r = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          login: f.login.value, password: f.password.value,
+          full_name: f.full_name.value, phone: f.phone.value,
+          email: f.email.value
+        })
+      });
+      const data = await r.json();
+      if (!r.ok) { msg.className='msg error'; msg.textContent = data.error; return; }
+      msg.className='msg ok'; msg.textContent='Пользователь создан!';
+      setTimeout(()=> location.href='index.html', 800);
+    });
+  </script>
+</body>
+</html>

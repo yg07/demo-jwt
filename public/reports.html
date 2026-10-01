@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <title>Мои заявки</title>
+</head>
+<body>
+  <header class="header-class">
+    <h1>Конференции.РФ</h1>
+    <nav><ul>
+      <li><a href="products.html">Заявка</a></li>
+      <li><a href="reports.html">Мои заявки</a></li>
+      <li><a href="#" id="logout">Выход</a></li>
+    </ul></nav>
+  </header>
+
+  <main>
+    <section class="infosite"><h1>Мои заявки</h1></section>
+    <div class="wrapper-col"><div id="list"></div></div>
+  </main>
+
+  <footer class="footer-site"><div><span>&copy; 2023 Self Rights</span></div></footer>
+
+  <script src="api.js"></script>
+  <script>
+    const statusClass = {
+      'Новая': 'status-new',
+      'Мероприятие назначено': 'status-assigned',
+      'Завершено': 'status-done'
+    };
+
+    async function load() {
+      const r = await Auth.request('/api/applications/my');
+      if (!r.ok) return;
+      const items = await r.json();
+      const box = document.getElementById('list');
+      if (!items.length) { box.innerHTML = '<p>Заявок пока нет.</p>'; return; }
+
+      box.innerHTML = items.map(it => `
+        <div class="form-card" style="max-width:100%">
+          <h3>Заявка №${it.id} — ${it.room_name} (${it.room_type})</h3>
+          <p><b>Дата:</b> ${new Date(it.start_date).toLocaleString('ru-RU')}</p>
+          <p><b>Оплата:</b> ${it.payment_method}</p>
+          <p><b>Статус:</b> <span class="${statusClass[it.status]||''}">${it.status}</span></p>
+          ${it.review
+            ? `<p><b>Отзыв:</b> ${it.review} (${it.review_rating}/5)</p>`
+            : (it.status === 'Завершено' ? `
+              <form class="review-form" data-id="${it.id}">
+                <label>Отзыв</label>
+                <textarea name="review" required></textarea>
+                <label>Оценка (1-5)</label>
+                <input type="number" name="rating" min="1" max="5" required>
+                <button type="submit">Отправить отзыв</button>
+              </form>` : '')
+          }
+        </div>`).join('');
+
+      box.querySelectorAll('.review-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const id = form.dataset.id;
+          const r = await Auth.request(`/api/applications/${id}/review`, {
+            method:'POST',
+            body: JSON.stringify({
+              review: form.review.value,
+              rating: Number(form.rating.value)
+            })
+          });
+          if (!r.ok) { alert((await r.json()).error); return; }
+          load();
+        });
+      });
+    }
+
+    (async () => {
+      const user = await Auth.bootstrap();
+      if (!user) { location.href='index.html'; return; }
+      load();
+    })();
+
+    document.getElementById('logout').addEventListener('click', (e) => {
+      e.preventDefault(); Auth.logout();
+    });
+  </script>
+</body>
+</html>
